@@ -7,6 +7,7 @@ import MoviesPage from "../modules/movie/MoviesPage";
 
 const Router = () => {
   const users = useSelector((state) => state.users);
+  const IsAuth = users.userList.length;
 
   const routes = useRoutes([
     {
@@ -19,13 +20,12 @@ const Router = () => {
         },
         {
           path: "Login",
-          element: !users.userList.length ? (
-            <LoginPage />
-          ) : (
-            <Navigate to="/Movies" replace />
-          ),
+          element: !IsAuth ? <LoginPage /> : <Navigate to="/Movies" replace />,
         },
-        { path: "Movies", element: <MoviesPage /> },
+        {
+          path: "Movies",
+          element: !!IsAuth ? <MoviesPage /> : <Navigate to="/Login" replace />,
+        },
         { path: "404", element: <Page404 /> },
       ],
     },
